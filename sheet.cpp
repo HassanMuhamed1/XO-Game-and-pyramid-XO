@@ -117,51 +117,93 @@ int main(){
 }
 //==============================================
 #include <iostream>
-#include<vector>
+#include <vector>
+#include <algorithm>
 using namespace std;
+
 template<class T>
-class Set{
+class Set {
 private:
-    vector <T> s;
+    vector<T> s;
 public:
-    void Push ( T element){
-        if(count(s.begin() ,s.end() , element)==0){
+    void Push(T element) {
+        if (count(s.begin(), s.end(), element) == 0) {
             s.push_back(element);
         }
+    }
 
-}
-    void Remove(T element){
-        auto it = find (s.begin() , s.end() , element);
-        if(it != s.end()){
+    void Remove(T element) {
+        auto it = find(s.begin(), s.end(), element);
+        if (it != s.end()) {
             s.erase(it);
         }
-}
-    int Size(){
+    }
+
+    int Size() {
         return s.size();
     }
-    bool contains(T element){
-        auto it = find(s.begin() , s.end() , element);
-        if(it != s.end()){
-            return true;
-        }
-        else{
-            return false;
-        }
+
+    bool contains(T element) {
+        auto it = find(s.begin(), s.end(), element);
+        return (it != s.end());
     }
-    void Count ( T element){
-        return count( s.begin() , s.end() , element);
+
+    int Count(T element) {
+        return count(s.begin(), s.end(), element);
+    }
+
+    T* ToArray() const {
+        T* array = new T[s.size()];
+        std::copy(s.begin(), s.end(), array);
+        return array;
+    }
+    bool operator == (Set & s1);
+    bool operator != (Set & s1);
+
+    ~Set() {
+        delete[] ToArray();
     }
 };
 
+template<class T>
+bool Set<T>::operator!=(Set &s1) {
+    if(s1.Size() != s.size()){
+        return true ;
+    }
+    else {
+        return false ;
+    }
+}
 
-int main(){
-    Set <int> s1;
-    s1.Push(1);
-    s1.Push(2);
-    s1.Push(3);
-    s1.Push(4);
-    s1.Push(1);
-    cout<< "Size of s : "<<s1.Size()<<endl;
-    cout<< "Is 3 in s1? "<<s1.contains(3)<<endl;
+template<class T>
+bool Set<T>::operator ==(Set &s1) {
+    if(s1.Size() == s.size()){
+        return true;
+    }
+    else{
+        return false;
+    }
+
+}
+
+int main() {
+    Set<string> s1 , s2;
+    s1.Push("Hassan");
+    s1.Push("Muhammed");
+    s1.Push("Hassan");
+    s1.Push("Muhammed");
+    s1.Push("Sona");
+    cout << "Size of s : " << s1.Size() << endl;
+    cout << "Is 3 in s1? " << s1.contains("Hassan") << endl;
+    cout << "Count of 1 in s1: " << s1.Count("Muhammed") << endl;
+    cout << "Count of 1 in s1: " << s1.Count("Hassan") << endl;
+    cout<< "number 3 is deleted "<<endl;
+    s1.Remove("Hassan");
+    cout<<s1.contains("Hassan");
+    if(s1 == s1){
+        cout<<"s1 equal to s2"<<endl;
+    }else if(s1 != s1){
+        cout<<"s1 not equal to s2"<<endl;
+    }
     return 0;
 }
