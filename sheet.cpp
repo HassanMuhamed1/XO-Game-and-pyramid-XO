@@ -115,3 +115,53 @@ int main(){
     }
     return 0;
 }
+//==============================================
+#include <iostream>
+#include<vector>
+using namespace std;
+template<class T>
+class Set{
+private:
+    vector <T> s;
+public:
+    void Push ( T element){
+        if(count(s.begin() ,s.end() , element)==0){
+            s.push_back(element);
+        }
+
+}
+    void Remove(T element){
+        auto it = find (s.begin() , s.end() , element);
+        if(it != s.end()){
+            s.erase(it);
+        }
+}
+    int Size(){
+        return s.size();
+    }
+    bool contains(T element){
+        auto it = find(s.begin() , s.end() , element);
+        if(it != s.end()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    void Count ( T element){
+        return count( s.begin() , s.end() , element);
+    }
+};
+
+
+int main(){
+    Set <int> s1;
+    s1.Push(1);
+    s1.Push(2);
+    s1.Push(3);
+    s1.Push(4);
+    s1.Push(1);
+    cout<< "Size of s : "<<s1.Size()<<endl;
+    cout<< "Is 3 in s1? "<<s1.contains(3)<<endl;
+    return 0;
+}
