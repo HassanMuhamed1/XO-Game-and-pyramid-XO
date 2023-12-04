@@ -116,6 +116,92 @@ int main(){
     return 0;
 }
 //==============================================
+/*
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <unistd.h>  // For sleep function
+
+using namespace std;
+
+const int rows = 20;
+const int cols = 50;
+
+// Function to initialize the grid with random initial state
+void initializeGrid(vector<vector<int>>& grid) {
+    srand(time(nullptr));
+    for (int i = 0; i < rows; ++i) {
+        vector<int> row;
+        for (int j = 0; j < cols; ++j) {
+            row.push_back(rand() % 2);
+        }
+        grid.push_back(row);
+    }
+}
+
+// Function to display the current state of the grid
+void displayGrid(const vector<vector<int>>& grid) {
+    for (const auto& row : grid) {
+        for (int cell : row) {
+            cout << (cell == 1 ? "." : "*") << ' ';
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+// Function to get the number of live neighbors for a given cell
+int countLiveNeighbors(const vector<vector<int>>& grid, int i, int j) {
+    int count = 0;
+    for (int x = max(0, i - 1); x < min(rows, i + 2); ++x) {
+        for (int y = max(0, j - 1); y < min(cols, j + 2); ++y) {
+            if (!(x == i && y == j)) {
+                count += grid[x][y];
+            }
+        }
+    }
+    return count;
+}
+
+// Function to update the grid based on the rules of the Game of Life
+void updateGrid(vector<vector<int>>& grid) {
+    vector<vector<int>> newGrid = grid;
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            int liveNeighbors = countLiveNeighbors(grid, i, j);
+
+            if (grid[i][j] == 1) {
+                if (liveNeighbors < 2 || liveNeighbors > 3) {
+                    newGrid[i][j] = 0;
+                }
+            } else {
+                if (liveNeighbors == 3) {
+                    newGrid[i][j] = 1;
+                }
+            }
+        }
+    }
+
+    grid = newGrid;
+}
+
+int main() {
+    vector<vector<int>> grid;
+
+    initializeGrid(grid);
+
+    for (int generation = 1; generation <= 50; ++generation) {
+        cout << "Generation " << generation << ":" << endl;
+        displayGrid(grid);
+        sleep(1);  // Optional: add a delay for better visualization
+        updateGrid(grid);
+    }
+
+    return 0;
+}
+*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -130,6 +216,7 @@ public:
         if (count(s.begin(), s.end(), element) == 0) {
             s.push_back(element);
         }
+       sort(s.begin(),s.end());
     }
 
     void Remove(T element) {
@@ -142,23 +229,26 @@ public:
     int Size() {
         return s.size();
     }
+    int print(){
+        for (int i = 0; i < s.size(); ++i) {
+            cout<<s[i];
+        }
+    }
+
 
     bool contains(T element) {
         auto it = find(s.begin(), s.end(), element);
         return (it != s.end());
     }
 
-    int Count(T element) {
-        return count(s.begin(), s.end(), element);
-    }
-
     T* ToArray() const {
         T* array = new T[s.size()];
-        std::copy(s.begin(), s.end(), array);
+        copy(s.begin(), s.end(), array);
         return array;
     }
     bool operator == (Set & s1);
     bool operator != (Set & s1);
+    T operator [](int i);
 
     ~Set() {
         delete[] ToArray();
@@ -166,44 +256,59 @@ public:
 };
 
 template<class T>
+T Set<T>::operator[](int i) {
+    return s[i];
+}
+
+template<class T>
 bool Set<T>::operator!=(Set &s1) {
-    if(s1.Size() != s.size()){
-        return true ;
-    }
-    else {
-        return false ;
+    if (s.size() != s1.Size()) {
+        return true;
+    } else {
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] != s1[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
 template<class T>
-bool Set<T>::operator ==(Set &s1) {
-    if(s1.Size() == s.size()){
+bool Set<T>::operator==(Set &s1) {
+    if (s.size() == s1.Size()) {
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] != s1[i]) {
+                return false;
+            }
+        }
         return true;
+    } else {
+        return false;  
     }
-    else{
-        return false;
-    }
-
 }
 
+
+
 int main() {
-    Set<string> s1 , s2;
-    s1.Push("Hassan");
-    s1.Push("Muhammed");
-    s1.Push("Hassan");
-    s1.Push("Muhammed");
-    s1.Push("Sona");
-    cout << "Size of s : " << s1.Size() << endl;
-    cout << "Is 3 in s1? " << s1.contains("Hassan") << endl;
-    cout << "Count of 1 in s1: " << s1.Count("Muhammed") << endl;
-    cout << "Count of 1 in s1: " << s1.Count("Hassan") << endl;
-    cout<< "number 3 is deleted "<<endl;
-    s1.Remove("Hassan");
-    cout<<s1.contains("Hassan");
-    if(s1 == s1){
-        cout<<"s1 equal to s2"<<endl;
-    }else if(s1 != s1){
-        cout<<"s1 not equal to s2"<<endl;
+    Set<int> s , s1;
+    s.Push(1);
+    s.Push(5);
+    s.Push(3);
+    s.Push(6);
+    s.Push(7);
+// 13567
+// 13568
+    s1.Push(1);
+    s1.Push(5);
+    s1.Push(3);
+    s1.Push(6);
+    s1.Push(8);
+    if(s == s1){
+        cout<<"is equal";
+    }
+    else if( s != s1){
+        cout<<"is not equal";
     }
     return 0;
 }
