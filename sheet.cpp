@@ -252,11 +252,17 @@ public:
 void Universe::initialize() {
     for(int i =0 ; i < Rows ; i++){
         for (int j = 0; j < columns; ++j){
+            cell[14][16] = 0;
+            cell[14][15] = 0;
             cell[14][14] = 1;
-            cell[15][15] = 1;
+
+            cell[15][16] = 1;
+            cell[15][15] = 0;
+            cell[15][14] = 1;
+
+            cell[16][16] = 0;
             cell[16][15] = 1;
             cell[16][14] = 1;
-            cell[16][13] = 1;
         }
     }
 }
@@ -297,18 +303,15 @@ void Universe::next_neighbors() {
             }
         }
     }
-
-    // Update the current state
-    std::memcpy(cell, nextCell, sizeof(cell));
+    memcpy(cell, nextCell, sizeof(cell));
 }
 void Universe::display() {
     for (int i = 0; i < Rows; ++i) {
         for (int j = 0; j < columns; ++j) {
-            std::cout << (cell[i][j] ? "L" : "0")<<" ";
+            cout << (cell[i][j] ? "0" : ".")<<" ";
         }
         std::cout << std::endl;
     }
-    usleep(100000);
 }
 void Universe::run(Universe& u) {
     u.initialize();
