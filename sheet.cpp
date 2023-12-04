@@ -116,92 +116,7 @@ int main(){
     return 0;
 }
 //==============================================
-/*
-#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <unistd.h>  // For sleep function
-
-using namespace std;
-
-const int rows = 20;
-const int cols = 50;
-
-// Function to initialize the grid with random initial state
-void initializeGrid(vector<vector<int>>& grid) {
-    srand(time(nullptr));
-    for (int i = 0; i < rows; ++i) {
-        vector<int> row;
-        for (int j = 0; j < cols; ++j) {
-            row.push_back(rand() % 2);
-        }
-        grid.push_back(row);
-    }
-}
-
-// Function to display the current state of the grid
-void displayGrid(const vector<vector<int>>& grid) {
-    for (const auto& row : grid) {
-        for (int cell : row) {
-            cout << (cell == 1 ? "." : "*") << ' ';
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
-// Function to get the number of live neighbors for a given cell
-int countLiveNeighbors(const vector<vector<int>>& grid, int i, int j) {
-    int count = 0;
-    for (int x = max(0, i - 1); x < min(rows, i + 2); ++x) {
-        for (int y = max(0, j - 1); y < min(cols, j + 2); ++y) {
-            if (!(x == i && y == j)) {
-                count += grid[x][y];
-            }
-        }
-    }
-    return count;
-}
-
-// Function to update the grid based on the rules of the Game of Life
-void updateGrid(vector<vector<int>>& grid) {
-    vector<vector<int>> newGrid = grid;
-
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            int liveNeighbors = countLiveNeighbors(grid, i, j);
-
-            if (grid[i][j] == 1) {
-                if (liveNeighbors < 2 || liveNeighbors > 3) {
-                    newGrid[i][j] = 0;
-                }
-            } else {
-                if (liveNeighbors == 3) {
-                    newGrid[i][j] = 1;
-                }
-            }
-        }
-    }
-
-    grid = newGrid;
-}
-
-int main() {
-    vector<vector<int>> grid;
-
-    initializeGrid(grid);
-
-    for (int generation = 1; generation <= 50; ++generation) {
-        cout << "Generation " << generation << ":" << endl;
-        displayGrid(grid);
-        sleep(1);  // Optional: add a delay for better visualization
-        updateGrid(grid);
-    }
-
-    return 0;
-}
-*/
+// problem 4
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -310,5 +225,106 @@ int main() {
     else if( s != s1){
         cout<<"is not equal";
     }
+    return 0;
+}
+//===============================================================
+// problem 6
+#include <iostream>
+#include <bits/stdc++.h>
+#include <unistd.h>
+
+using namespace std;
+class Universe {
+private:
+    static const int Rows = 30;
+    static const int columns = 30;
+public:
+    int cell[Rows][columns]={0};
+    void initialize();
+    void reset();
+    int count_neighbors(int row, int col);
+    void next_neighbors();
+    void display();
+    void run(Universe& u);
+    static const int directions[8][2];
+};
+
+void Universe::initialize() {
+    for(int i =0 ; i < Rows ; i++){
+        for (int j = 0; j < columns; ++j){
+            cell[14][14] = 1;
+            cell[15][15] = 1;
+            cell[16][15] = 1;
+            cell[16][14] = 1;
+            cell[16][13] = 1;
+        }
+    }
+}
+void Universe::reset() {
+    memset(cell, 0, sizeof(cell));
+}
+const int Universe::directions[8][2] = {
+        {-1, -1}, {-1, 0}, {-1, 1},
+        {0, -1},            {0, 1},
+        {1, -1}, {1, 0}, {1, 1}
+};
+int Universe::count_neighbors(int row, int col) {
+    int count = 0;
+
+    for (int d = 0; d < 8; ++d) {
+        int newRow = row + directions[d][0];
+        int newCol = col + directions[d][1];
+
+        if (newRow >= 0 && newRow < Rows && newCol >= 0 && newCol < columns) {
+            count += cell[newRow][newCol];
+        }
+    }
+
+    return count;
+}
+
+void Universe::next_neighbors() {
+    int nextCell[Rows][columns];
+
+    for (int i = 0; i < Rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            int neighbors = count_neighbors(i, j);
+
+            if (cell[i][j] == 1) {
+                nextCell[i][j] = (neighbors < 2 || neighbors > 3) ? 0 : 1;
+            } else {
+                nextCell[i][j] = (neighbors == 3) ? 1 : 0;
+            }
+        }
+    }
+
+    // Update the current state
+    std::memcpy(cell, nextCell, sizeof(cell));
+}
+void Universe::display() {
+    for (int i = 0; i < Rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            std::cout << (cell[i][j] ? "L" : "0")<<" ";
+        }
+        std::cout << std::endl;
+    }
+    usleep(100000);
+}
+void Universe::run(Universe& u) {
+    u.initialize();
+    for (int i = 0; i < 2; ++i) {
+        {
+            display();
+            next_neighbors();
+            cout<<endl << "================================================"<<endl;
+        }
+    }
+    u.reset();
+}
+
+int main() {
+    Universe u;
+    u.run(u);
+
     return 0;
 }
