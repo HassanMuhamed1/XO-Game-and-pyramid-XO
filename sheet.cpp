@@ -252,17 +252,11 @@ public:
 void Universe::initialize() {
     for(int i =0 ; i < Rows ; i++){
         for (int j = 0; j < columns; ++j){
-            cell[14][16] = 0;
-            cell[14][15] = 0;
             cell[14][14] = 1;
-
-            cell[15][16] = 1;
-            cell[15][15] = 0;
-            cell[15][14] = 1;
-
-            cell[16][16] = 0;
+            cell[15][15] = 1;
             cell[16][15] = 1;
             cell[16][14] = 1;
+            cell[16][13] = 1;
         }
     }
 }
@@ -306,116 +300,6 @@ void Universe::next_neighbors() {
     memcpy(cell, nextCell, sizeof(cell));
 }
 void Universe::display() {
-    for (int i = 0; i < Rows; ++i) {
-        for (int j = 0; j < columns; ++j) {
-            cout << (cell[i][j] ? "0" : ".")<<" ";
-        }
-        std::cout << std::endl;
-    }
-}
-void Universe::run(Universe& u) {
-    u.initialize();
-    for (int i = 0; i < 2; ++i) {
-        {
-            display();
-            next_neighbors();
-            cout<<endl << "================================================"<<endl;
-        }
-    }
-    u.reset();
-}
-
-int main() {
-    Universe u;
-    u.run(u);
-
-    return 0;
-}
-// ==================================================
-#include <iostream>
-#include <bits/stdc++.h>
-#include <unistd.h>
-
-using namespace std;
-class Universe {
-private:
-    static const int Rows = 30;
-    static const int columns = 30;
-public:
-    int cell[Rows][columns]={0};
-    void initialize();
-    void reset();
-    int count_neighbors(int row, int col);
-    void next_neighbors();
-    void display();
-    void run(Universe& u);
-    static const int directions[8][2];
-};
-
-void Universe::initialize() {
-    for(int i =0 ; i < Rows ; i++){
-        for (int j = 0; j < columns; ++j){
-            cell[14][16] = 0;
-            cell[14][15] = 0;
-            cell[14][14] = 1;
-
-            cell[15][16] = 1;
-            cell[15][15] = 0;
-            cell[15][14] = 1;
-
-            cell[16][16] = 0;
-            cell[16][15] = 1;
-            cell[16][14] = 1;
-        }
-    }
-}
-void Universe::reset() {
-    memset(cell, 0, sizeof(cell));
-}
-const int Universe::directions[8][2] = {
-        {-1, -1}, {-1, 0}, {-1, 1},
-        {0, -1},            {0, 1},
-        {1, -1}, {1, 0}, {1, 1}
-};
-int Universe::count_neighbors(int row, int col) {
-    int count = 0;
-
-    for (int d = 0; d < 8; ++d) {
-        int newRow = row + directions[d][0];
-        int newCol = col + directions[d][1];
-
-        if (newRow >= 0 && newRow < Rows && newCol >= 0 && newCol < columns) {
-            count += cell[newRow][newCol];
-        }
-    }
-
-    return count;
-}
-
-void Universe::next_neighbors() {
-    int nextCell[Rows][columns];
-
-    for (int i = 0; i < Rows; ++i) {
-        for (int j = 0; j < columns; ++j) {
-            int neighbors = count_neighbors(i, j);
-
-            if (cell[i][j] == 1) {
-                nextCell[i][j] = (neighbors < 2 || neighbors > 3) ? 0 : 1;
-            } else {
-                nextCell[i][j] = (neighbors == 3) ? 1 : 0;
-            }
-        }
-    }
-    memcpy(cell, nextCell, sizeof(cell));
-}
-void Universe::display() {
-    for (int i = 0; i < Rows; i++) {
-        for (int j = 0; j < columns / 2; j++) {
-            int temp = cell[i][j];
-            cell[i][j] = cell[i][columns - 1 - j];
-            cell[i][columns - 1 - j] = temp;
-        }
-    }
     for (int i = 0; i < Rows; ++i) {
         for (int j = 0; j < columns; ++j) {
             cout << (cell[i][j] ? "X" : ".")<<" ";
