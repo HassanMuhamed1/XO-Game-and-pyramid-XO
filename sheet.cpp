@@ -110,12 +110,12 @@ int main(){
     inputFile.close();
 
     cout << "Frequency Table:\n";
+    // to loop on map and print word and the time of apperance here
     for (const auto& pair : FrequencyTable) {
         cout << pair.first << ": " << pair.second << endl;
     }
     return 0;
-}
-//==============================================
+}//==============================================
 // problem 4
 #include <iostream>
 #include <vector>
