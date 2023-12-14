@@ -34,4 +34,6 @@ void GameManager::run() {
             }
         }
     }
+    delete[]players[1];
+    delete[]players[0];
 }

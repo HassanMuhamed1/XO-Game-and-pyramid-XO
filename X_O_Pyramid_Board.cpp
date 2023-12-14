@@ -86,3 +86,7 @@ bool X_O_Pyramid_Board::is_draw() {
 bool X_O_Pyramid_Board::game_is_over() {
     return n_moves >= 9;
 }
+
+X_O_Pyramid_Board::~X_O_Pyramid_Board() {
+    delete[]board;
+}
