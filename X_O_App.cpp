@@ -19,8 +19,6 @@ int main() {
     cout << "Welcome to FCAI X-O Game. :)\n";
     cout<<"1-3x3 Tic Tac Toe \n";
     cout<<"2-Pyramid XO \n";
-    cout<<"3-Connect Four \n";
-    cout<<"4-5x5 Tic Tac Toe \n";
     cout<<"Enter name or number of game which you want: ";
 
     int choiceGame;
@@ -49,28 +47,8 @@ int main() {
         GameManager x_o_game (new X_O_Pyramid_Board(), players);
         x_o_game.run();
     }
-    else if (choiceGame == 3){
-        if(choice == 1){
-            players[1] = new RandomPlayer ('o', 3);
-        }
-        else{
-            players[1] = new Player (2, 'o');
-        }
-//        GameManager x_o_game (new X_O_Pyramid_Board(), players);
-//        x_o_game.run();
-    }
-    else if (choiceGame == 4){
-        if(choice == 1){
-            players[1] = new RandomPlayer ('o', 3);
-        }
-        else{
-            players[1] = new Player (2, 'o');
-        }
-//        GameManager x_o_game (new X_O_Pyramid_Board(), players);
-//        x_o_game.run();
-    }
+    
 
-   
    delete players[0];
    delete players[1];
 
