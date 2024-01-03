@@ -11,8 +11,8 @@ X_O_Pyramid_Board::X_O_Pyramid_Board() {
 }
 
 bool X_O_Pyramid_Board::update_board(int x, int y, char mark) {
-    if(x==0&&y==0 && board[x][y]==0 || x==1&&(y==0||y==1||y==2) && board[x][y]==0
-       || x==2&& (y==0||y==1||y==2 ||y==3 || y==4 )&&board[x][y]==0){
+    if(x==0&&y==0 && board[x][y]==0 || x==1&&(y>=0 && y<=2) && board[x][y]==0
+       || x==2&& (y>=0 && y<=4)&&board[x][y]==0){
         board[x][y] = (char)toupper(mark);
         n_moves++;
         return true;
@@ -48,7 +48,7 @@ void X_O_Pyramid_Board::display_board() {
 }
 
 bool X_O_Pyramid_Board::is_winner() {
-    char row_win[3], col_win[1], diag_win[2];
+    char row_win[4], col_win[1], diag_win[2];
     int j = 0,row = 2;
     for (int i:{1,2,3,4}) {
         if(i==1) {
@@ -56,11 +56,12 @@ bool X_O_Pyramid_Board::is_winner() {
         else{
             row_win[row] = (char)(board[row][j] & board[row][j+1] & board[row][j+2]);
             ++j;
-            if(row_win[row] == 'X' || col_win[row] == 'O'){
+            if(row_win[row] == 'X' ){
                 break;
             }
         }
     }
+
     diag_win[0] = char(board[0][0] & board[1][0] & board[2][0]);
     diag_win[1] = char(board[0][0] & board[1][2] & board[2][4]);
     col_win[0] = char(board[0][0] & board[1][1] & board[2][2]);
@@ -88,5 +89,11 @@ bool X_O_Pyramid_Board::game_is_over() {
 }
 
 X_O_Pyramid_Board::~X_O_Pyramid_Board() {
-    delete[]board;
+    for (int i = 0; i < n_rows; ++i) {
+        delete[] board[i];
+    }
+    delete[] board;
 }
+//X_O_Pyramid_Board::~X_O_Pyramid_Board() {
+//    delete[]board;
+//}
